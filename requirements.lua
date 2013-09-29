@@ -31,6 +31,11 @@ beholder = require 'lib/beholder'
 
 require 'base'
 require 'game'
+require 'runner'
+require 'platform'
+require 'moving_sprite'
+require 'rob_ford'
+require 'obstacle'
 
 local function require_all(directory)
   local lfs = love.filesystem
