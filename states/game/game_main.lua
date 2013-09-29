@@ -62,20 +62,20 @@ function Main:render()
     obj:render()
   end
 
-  local count = 0
-  g.setColor(COLORS.blue:rgb())
-  for k,v in pairs(Collider._active_shapes) do
-    v:draw("line")
-    count = count + 1
-  end
-  -- print(count)
+  -- local count = 0
+  -- g.setColor(COLORS.blue:rgb())
+  -- for k,v in pairs(Collider._active_shapes) do
+  --   v:draw("line")
+  --   count = count + 1
+  -- end
+  -- -- print(count)
 
-  count = 0
-  g.setColor(COLORS.pink:rgb())
-  for k,v in pairs(Collider._ghost_shapes) do
-    v:draw("line")
-    count = count + 1
-  end
+  -- count = 0
+  -- g.setColor(COLORS.pink:rgb())
+  -- for k,v in pairs(Collider._ghost_shapes) do
+  --   v:draw("line")
+  --   count = count + 1
+  -- end
   -- print(count)
 
   self.camera:unset()

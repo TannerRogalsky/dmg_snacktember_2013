@@ -5,13 +5,13 @@ local points = {}
 function RobFord:initialize(x, y)
   Base.initialize(self)
 
-  self.width, self.height = 115, 175
-
-  self._physics_body = Collider:addRectangle(x, y, self.width, self.height / 4)
-  self._physics_body.parent = self
-
   self.image = game.preloaded_image["rob_ford_anim.png"]
   self.anim = newAnimation(self.image, 134, 184, 0.2, 4)
+
+  self.width, self.height = 134, 184
+
+  self._physics_body = Collider:addRectangle(x, y, self.width / 3 * 2, self.height / 4)
+  self._physics_body.parent = self
 
   self.keyboard_update = {
     up = self.up,
