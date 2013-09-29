@@ -1,4 +1,5 @@
 MovableSprite = class('MovableSprite', Base)
+MovableSprite:include(YSortable)
 MovableSprite.static.instances = skiplist.new(30)
 
 function MovableSprite:initialize(x, y, image, scale, velx, vely, z, repeats)
@@ -38,15 +39,4 @@ end
 
 function MovableSprite:destroy()
   MovableSprite.instances:delete(self)
-end
-
-function MovableSprite:__lt(other)
-  if self.z < other.z then return true
-  elseif self.z == other.z and self.id < other.id then return true
-  else return false
-  end
-end
-
-function MovableSprite:__le(other)
-  return self < other
 end

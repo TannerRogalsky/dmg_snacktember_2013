@@ -12,18 +12,22 @@ function Main:enteredState()
   for i,building_image_name in ipairs(buildings) do
     cron.every(1, function()
       if math.random() > 0.85 then
-        local sprite = MovableSprite:new(g.getWidth(), 0, self.preloaded_image[building_image_name], 1, bspeeds[i], 0, #buildings - i)
+        local sprite = MovableSprite:new(g.getWidth(), 0, self.preloaded_image[building_image_name], 1, bspeeds[i], 0, #buildings - i + 5)
         sprite.y = 400 - sprite.height
       end
     end)
   end
 
+  self.render_queue = {}
+
   cron.every(2.2, function()
     local w, h = 100, 100
-    Obstacle:new(g.getWidth(), math.random(400, g.getHeight()), w, h, -100, 0)
+    local new_obstacle = Obstacle:new(g.getWidth(), math.random(400, g.getHeight()), w, h, -100, 0)
+    table.insert(self.render_queue, new_obstacle)
   end)
 
   self.rob_ford = RobFord:new(100, g.getHeight() - 300)
+  table.insert(self.render_queue, self.rob_ford)
 end
 
 function Main:update(dt)
@@ -37,6 +41,12 @@ function Main:update(dt)
     obstacle:update(dt)
   end
 
+  table.sort(self.render_queue, function(a, b)
+    local ax1, ay1, ax2, ay2 = a:bbox()
+    local bx1, by1, bx2, by2 = b:bbox()
+    return ay2 < by2
+  end)
+
   self.rob_ford:update(dt)
 end
 
@@ -48,11 +58,9 @@ function Main:render()
     msprite:render()
   end
 
-  for _,obstacle in pairs(Obstacle.instances) do
-    obstacle:render()
+  for _, obj in ipairs(self.render_queue) do
+    obj:render()
   end
-
-  self.rob_ford:render()
 
   local count = 0
   g.setColor(COLORS.blue:rgb())
@@ -60,6 +68,15 @@ function Main:render()
     v:draw("line")
     count = count + 1
   end
+  -- print(count)
+
+  count = 0
+  g.setColor(COLORS.pink:rgb())
+  for k,v in pairs(Collider._ghost_shapes) do
+    v:draw("line")
+    count = count + 1
+  end
+  -- print(count)
 
   self.camera:unset()
 end
@@ -72,6 +89,9 @@ function Main:mousereleased(x, y, button)
 end
 
 function Main:keypressed(key, unicode)
+  if key == " " then
+    self.rob_ford:punch()
+  end
 end
 
 function Main:keyreleased(key, unicode)

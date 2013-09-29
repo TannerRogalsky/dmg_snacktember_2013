@@ -29,13 +29,15 @@ COLORS = require 'lib/colors'
 tween = require 'lib/tween'
 beholder = require 'lib/beholder'
 
+YSortable = require 'mixins/y_sortable'
+
 require 'base'
 require 'game'
 require 'runner'
 require 'platform'
 require 'moving_sprite'
-require 'rob_ford'
 require 'obstacle'
+require 'rob_ford'
 
 local function require_all(directory)
   local lfs = love.filesystem

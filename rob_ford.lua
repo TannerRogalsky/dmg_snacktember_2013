@@ -1,5 +1,7 @@
 RobFord = class('RobFord', Base)
 
+local points = {}
+
 function RobFord:initialize(x, y)
   Base.initialize(self)
 
@@ -8,7 +10,7 @@ function RobFord:initialize(x, y)
   self._physics_body = Collider:addRectangle(x, y, self.width, self.height / 4)
   self._physics_body.parent = self
 
-  self.image = game.preloaded_image["Rob Ford.png"]
+  self.image = game.preloaded_image["Rob_Ford_standing copy.png"]
 
   self.keyboard_update = {
     up = self.up,
@@ -35,12 +37,21 @@ function RobFord:update(dt)
   end
 
   self._physics_body:move(self.velx * 50 * dt, self.vely * 50 * dt)
+  -- if self.vely ~= 0 then
+  --   game.render_queue:delete(self)
+  --   game.render_queue:insert(self)
+  -- end
 end
 
 function RobFord:render()
   g.setColor(COLORS.white:rgb())
   local x1, y1, x2, y2 = self:bbox()
   g.draw(self.image, x1, y2 - self.height)
+
+  g.setColor(COLORS.red:rgb())
+  for _,point in ipairs(points) do
+    g.circle("fill", point[1], point[2], 5)
+  end
 end
 
 function RobFord:bbox()
@@ -67,9 +78,34 @@ function RobFord:right()
   self.velx = 2
 end
 
+function RobFord:punch()
+  local x, y = self._physics_body:center()
+  y =  y - self.height / 2
+  x = x + self.width
+  local connected = Collider:shapesAt(x, y)[1]
+  if connected then connected = connected.parent end
+
+  if connected ~= nil then
+    local old_rendr = self.render
+    local punch_img = game.preloaded_image["Rob_Ford_punching copy.png"]
+    function self:render()
+      g.setColor(COLORS.white:rgb())
+      local x1, y1, x2, y2 = self:bbox()
+      g.draw(punch_img, x1, y2 - self.height)
+    end
+    cron.after(0.5, function() self.render = old_rendr end)
+    connected:destroy()
+  end
+  -- print(connected)
+  -- table.insert(points, {x, y})
+end
+
 function RobFord:on_collide(dt, other, mtv_x, mtv_y)
   if instanceOf(Obstacle, other) then
     print("hit " .. tostring(other))
     other:destroy()
   end
 end
+
+RobFord.__lt = Obstacle.__lt
+RobFord.__le = Obstacle.__le
