@@ -5,7 +5,9 @@ function Obstacle:initialize(x, y, width, height, velx, vely)
   Base.initialize(self)
 
   local images = {"homeless_man.png", "KFC_bucket.png", "Paparazzi.png", "trashbag.png"}
-  self.image = game.preloaded_image[images[math.random(#images)]]
+  local num = math.random(#images)
+  self.image = game.preloaded_image[images[num]]
+  self.image_name = images[num]
 
   self.velx, self.vely = velx, vely
   self.width, self.height = self.image:getWidth(), self.image:getHeight()

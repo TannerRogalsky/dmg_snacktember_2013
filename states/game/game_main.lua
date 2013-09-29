@@ -127,6 +127,7 @@ end
 function Main:exitedState()
   Collider:clear()
   Collider = nil
+  cron.reset()
 end
 
 return Main

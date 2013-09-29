@@ -10,7 +10,8 @@ function RobFord:initialize(x, y)
   self._physics_body = Collider:addRectangle(x, y, self.width, self.height / 4)
   self._physics_body.parent = self
 
-  self.image = game.preloaded_image["Rob_Ford_standing copy.png"]
+  self.image = game.preloaded_image["rob_ford_anim.png"]
+  self.anim = newAnimation(self.image, 134, 184, 0.2, 4)
 
   self.keyboard_update = {
     up = self.up,
@@ -23,6 +24,7 @@ function RobFord:initialize(x, y)
 end
 
 function RobFord:update(dt)
+  self.anim:update(dt)
   self.velx, self.vely = 0, 0
   for key,action in pairs(self.keyboard_update) do
     if love.keyboard.isDown(key) then action(self, dt) end
@@ -46,7 +48,8 @@ end
 function RobFord:render()
   g.setColor(COLORS.white:rgb())
   local x1, y1, x2, y2 = self:bbox()
-  g.draw(self.image, x1, y2 - self.height)
+  -- g.draw(self.image, x1, y2 - self.height)
+  self.anim:draw(x1, y2 - self.height)
 
   g.setColor(COLORS.red:rgb())
   for _,point in ipairs(points) do
@@ -85,15 +88,15 @@ function RobFord:punch()
   local connected = Collider:shapesAt(x, y)[1]
   if connected then connected = connected.parent end
 
-  if connected ~= nil then
-    local old_rendr = self.render
+  if connected ~= nil and connected.image_name == "Paparazzi.png" then
+    local old_render = self.render
     local punch_img = game.preloaded_image["Rob_Ford_punching copy.png"]
     function self:render()
       g.setColor(COLORS.white:rgb())
       local x1, y1, x2, y2 = self:bbox()
       g.draw(punch_img, x1, y2 - self.height)
     end
-    cron.after(0.5, function() self.render = old_rendr end)
+    cron.after(0.5, function() self.render = old_render end)
     connected:destroy()
   end
   -- print(connected)
@@ -102,8 +105,12 @@ end
 
 function RobFord:on_collide(dt, other, mtv_x, mtv_y)
   if instanceOf(Obstacle, other) then
-    print("hit " .. tostring(other))
-    other:destroy()
+    if other.image_name == "KFC_bucket.png" then
+      other:destroy()
+    else
+      other:destroy()
+      game:gotoState("Over")
+    end
   end
 end
 
