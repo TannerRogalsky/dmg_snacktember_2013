@@ -116,3 +116,5 @@ end
 
 RobFord.__lt = Obstacle.__lt
 RobFord.__le = Obstacle.__le
+
+return RobFord

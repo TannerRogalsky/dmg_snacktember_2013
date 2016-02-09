@@ -70,3 +70,5 @@ end
 function Obstacle:__le(other)
   return self < other
 end
+
+return Obstacle

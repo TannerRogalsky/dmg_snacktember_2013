@@ -61,3 +61,5 @@ function Runner:on_collide(dt, other, mtv_x, mtv_y)
     self.vel_y = 0
   end
 end
+
+return Runner

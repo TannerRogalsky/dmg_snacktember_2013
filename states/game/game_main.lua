@@ -89,7 +89,7 @@ function Main:mousereleased(x, y, button)
 end
 
 function Main:keypressed(key, unicode)
-  if key == " " then
+  if key == "space" then
     self.rob_ford:punch()
   end
 end

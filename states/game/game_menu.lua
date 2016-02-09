@@ -1,7 +1,7 @@
 local Menu = Game:addState('Menu')
 
 function Menu:enteredState()
-  self.background_image = game.preloaded_image["Intro_Screen.png"]
+  self.background_image = self.preloaded_image["Intro_Screen.png"]
   self.scale = g.getHeight() / self.background_image:getHeight()
 end
 

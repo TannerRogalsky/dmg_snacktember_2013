@@ -3,9 +3,6 @@ g = love.graphics
 GRAVITY = 700
 math.tau = math.pi * 2
 
--- The pixel grid is actually offset to the center of each pixel. So to get clean pixels drawn use 0.5 + integer increments.
-g.setPoint(2.5, "rough")
-math.randomseed(os.time())
 function math.round(n, deci) deci = 10^(deci or 0) return math.floor(n*deci+.5)/deci end
 function math.clamp(low, n, high) return math.min(math.max(low, n), high) end
 function pointInCircle(circle, point) return (point.x-circle.x)^2 + (point.y - circle.y)^2 < circle.radius^2 end
@@ -23,7 +20,6 @@ skiplist = require "lib/skiplist"
 HC = require 'lib/HardonCollider'
 inspect = require 'lib/inspect'
 require 'lib/AnAL'
-require 'lib/LoveFrames'
 cron = require 'lib/cron'
 COLORS = require 'lib/colors'
 tween = require 'lib/tween'
@@ -31,17 +27,17 @@ beholder = require 'lib/beholder'
 
 YSortable = require 'mixins/y_sortable'
 
-require 'base'
-require 'game'
-require 'runner'
-require 'platform'
-require 'moving_sprite'
-require 'obstacle'
-require 'rob_ford'
+Base = require 'base'
+Game = require 'game'
+Runner = require 'runner'
+Platform = require 'platform'
+MovableSprite = require 'moving_sprite'
+Obstacle = require 'obstacle'
+RobFord = require 'rob_ford'
 
 local function require_all(directory)
   local lfs = love.filesystem
-  for index,filename in ipairs(lfs.enumerate(directory)) do
+  for index,filename in ipairs(lfs.getDirectoryItems(directory)) do
     local file = directory .. "/" .. filename
     if lfs.isFile(file) and file:match("%.lua$") then
       require(file:gsub("%.lua", ""))

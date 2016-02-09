@@ -40,3 +40,5 @@ end
 function MovableSprite:destroy()
   MovableSprite.instances:delete(self)
 end
+
+return MovableSprite

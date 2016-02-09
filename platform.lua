@@ -34,3 +34,5 @@ function Platform:destroy()
   Collider:remove(self._physics_body)
   Platform.instances[self.id] = nil
 end
+
+return Platform

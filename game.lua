@@ -41,3 +41,5 @@ end
 
 function Game:quit()
 end
+
+return Game
